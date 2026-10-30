@@ -1,0 +1,11 @@
+.idea/
+*.iml
+.vscode/
+!.vscode/settings.json
+.DS_Store
+.env
+pgdata/
+api/target/
+web/node_modules/
+web/dist/
+web/.angular/
