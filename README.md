@@ -74,8 +74,20 @@ Enviar o token no header `Authorization: Bearer <token>`.
 | `JWT_SEGREDO` | valor de desenvolvimento | Segredo do JWT, mínimo de 32 caracteres |
 | `JWT_EXPIRACAO` | `2h` | Validade do token |
 | `CORS_ORIGENS` | `http://localhost:4200` | Origens permitidas, separadas por vírgula |
+| `FUSO_HORARIO` | `America/Sao_Paulo` | Fuso usado para calcular "hoje" e vencimentos |
 
 Em produção, sempre defina `JWT_SEGREDO` com um valor forte e exclusivo.
+
+## Categorias
+
+Cada usuário recebe categorias padrão no cadastro e pode gerenciar as próprias. O tipo (`RECEITA` ou `DESPESA`) não muda depois de criado, e nomes são únicos por usuário e tipo, ignorando maiúsculas e minúsculas.
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/api/categorias?tipo=` | Lista as categorias, com filtro opcional por tipo |
+| POST | `/api/categorias` | Cria uma categoria |
+| PUT | `/api/categorias/{id}` | Renomeia |
+| DELETE | `/api/categorias/{id}` | Exclui, desde que não tenha lançamentos |
 
 ## Status
 
