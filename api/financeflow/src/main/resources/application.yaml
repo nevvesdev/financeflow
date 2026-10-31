@@ -26,9 +26,11 @@ management:
         include: health,info
 
 financeflow:
+  fuso-horario: ${FUSO_HORARIO:America/Sao_Paulo}
   jwt:
     segredo: ${JWT_SEGREDO:chave-somente-para-desenvolvimento-local-0123456789}
     expiracao: ${JWT_EXPIRACAO:2h}
     emissor: financeflow
   cors:
     origens-permitidas: ${CORS_ORIGENS:http://localhost:4200}
+
