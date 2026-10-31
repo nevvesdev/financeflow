@@ -12,6 +12,9 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+  web:
+    locale: pt-BR
+    locale-resolver: fixed
 
 server:
   port: ${PORT:8080}
@@ -21,3 +24,11 @@ management:
     web:
       exposure:
         include: health,info
+
+financeflow:
+  jwt:
+    segredo: ${JWT_SEGREDO:chave-somente-para-desenvolvimento-local-0123456789}
+    expiracao: ${JWT_EXPIRACAO:2h}
+    emissor: financeflow
+  cors:
+    origens-permitidas: ${CORS_ORIGENS:http://localhost:4200}
