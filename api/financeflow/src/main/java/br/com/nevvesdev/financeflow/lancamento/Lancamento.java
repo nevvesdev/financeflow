@@ -1,6 +1,7 @@
 package br.com.nevvesdev.financeflow.lancamento;
 
 import br.com.nevvesdev.financeflow.categoria.Categoria;
+import br.com.nevvesdev.financeflow.compartilhado.NaturezaLancamento;
 import br.com.nevvesdev.financeflow.compartilhado.RegraDeNegocioException;
 import br.com.nevvesdev.financeflow.compartilhado.TipoLancamento;
 import br.com.nevvesdev.financeflow.compartilhado.Validacao;
@@ -55,6 +56,10 @@ public class Lancamento {
     @Column(nullable = false, length = 10, updatable = false)
     private TipoLancamento tipo;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private NaturezaLancamento natureza = NaturezaLancamento.VARIAVEL;
+
     @Column(name = "data_lancamento", nullable = false)
     private LocalDate dataLancamento;
 
@@ -85,9 +90,22 @@ public class Lancamento {
         BigDecimal valor,
         LocalDate dataLancamento,
         LocalDate dataVencimento) {
+        return criar(usuario, categoria, descricao, valor, dataLancamento, dataVencimento,
+            NaturezaLancamento.VARIAVEL);
+    }
+
+    public static Lancamento criar(
+        Usuario usuario,
+        Categoria categoria,
+        String descricao,
+        BigDecimal valor,
+        LocalDate dataLancamento,
+        LocalDate dataVencimento,
+        NaturezaLancamento natureza) {
         Lancamento lancamento = new Lancamento();
         lancamento.usuario = Validacao.obrigatorio(usuario, "usuário");
         lancamento.tipo = Validacao.obrigatorio(categoria, "categoria").getTipo();
+        lancamento.natureza = Validacao.obrigatorio(natureza, "natureza");
         lancamento.preencher(categoria, descricao, valor, dataLancamento, dataVencimento);
         return lancamento;
     }
@@ -102,6 +120,10 @@ public class Lancamento {
             throw new RegraDeNegocioException("categoria deve ser do mesmo tipo do lançamento");
         }
         preencher(categoria, descricao, valor, dataLancamento, dataVencimento);
+    }
+
+    public void definirNatureza(NaturezaLancamento natureza) {
+        this.natureza = Validacao.obrigatorio(natureza, "natureza");
     }
 
     public void marcarComoPaga(LocalDate dataPagamento) {
@@ -174,6 +196,10 @@ public class Lancamento {
 
     public TipoLancamento getTipo() {
         return tipo;
+    }
+
+    public NaturezaLancamento getNatureza() {
+        return natureza;
     }
 
     public LocalDate getDataLancamento() {
