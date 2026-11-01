@@ -117,6 +117,20 @@ O tipo (`RECEITA` ou `DESPESA`) vem da categoria escolhida. A `natureza` diferen
 | `page`, `size` | `0`, `20` | Paginação (máximo de 100 por página) |
 | `sort` | `valor,desc` | Ordenação por `dataLancamento`, `dataVencimento`, `valor`, `descricao` ou `criadoEm` |
 
+## Painel
+
+`GET /api/painel?mes=2026-10` devolve tudo o que a tela principal precisa em uma requisição. Sem `mes`, usa o mês atual.
+
+| Bloco | Conteúdo |
+|---|---|
+| `previsto` | Entradas, saídas e saldo de todos os lançamentos do mês |
+| `realizado` | Entradas, saídas e saldo apenas dos lançamentos pagos |
+| `contasAVencer` | Despesas em aberto até hoje + 7 dias, atrasadas primeiro, com `vencido` e `diasParaVencer` |
+| `gastosPorCategoria` | Despesas do mês por categoria, com total e percentual |
+| `despesasPorNatureza` | Despesas do mês separadas em fixas e variáveis |
+
+As somas são calculadas no banco, e a lista de contas a vencer traz no máximo 50 itens, com `quantidade` e `valorTotal` cobrindo todas.
+
 ## Status
 
 Em desenvolvimento.
