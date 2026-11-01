@@ -17,15 +17,15 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final ConsultaDeUsoDeCategoria consultaDeUso;
+    private final List<ConsultaDeUsoDeCategoria> consultasDeUso;
 
     public CategoriaService(
         CategoriaRepository categoriaRepository,
         UsuarioRepository usuarioRepository,
-        ConsultaDeUsoDeCategoria consultaDeUso) {
+        List<ConsultaDeUsoDeCategoria> consultasDeUso) {
         this.categoriaRepository = categoriaRepository;
         this.usuarioRepository = usuarioRepository;
-        this.consultaDeUso = consultaDeUso;
+        this.consultasDeUso = consultasDeUso;
     }
 
     @Transactional(readOnly = true)
@@ -62,7 +62,7 @@ public class CategoriaService {
     @Transactional
     public void excluir(UUID usuarioId, UUID id) {
         Categoria categoria = buscar(usuarioId, id);
-        if (consultaDeUso.estaEmUso(id)) {
+        if (consultasDeUso.stream().anyMatch(consulta -> consulta.estaEmUso(id))) {
             throw new CategoriaEmUsoException();
         }
         try {
