@@ -17,10 +17,15 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ConsultaDeUsoDeCategoria consultaDeUso;
 
-    public CategoriaService(CategoriaRepository categoriaRepository, UsuarioRepository usuarioRepository) {
+    public CategoriaService(
+        CategoriaRepository categoriaRepository,
+        UsuarioRepository usuarioRepository,
+        ConsultaDeUsoDeCategoria consultaDeUso) {
         this.categoriaRepository = categoriaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.consultaDeUso = consultaDeUso;
     }
 
     @Transactional(readOnly = true)
@@ -57,6 +62,9 @@ public class CategoriaService {
     @Transactional
     public void excluir(UUID usuarioId, UUID id) {
         Categoria categoria = buscar(usuarioId, id);
+        if (consultaDeUso.estaEmUso(id)) {
+            throw new CategoriaEmUsoException();
+        }
         try {
             categoriaRepository.delete(categoria);
             categoriaRepository.flush();
