@@ -40,4 +40,6 @@ financeflow:
     emissor: financeflow
   cors:
     origens-permitidas: ${CORS_ORIGENS:http://localhost:4200}
+  notificacoes:
+    cron: "${NOTIFICACOES_CRON:0 30 7 * * *}"
 
