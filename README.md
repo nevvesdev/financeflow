@@ -89,6 +89,34 @@ Cada usuário recebe categorias padrão no cadastro e pode gerenciar as própria
 | PUT | `/api/categorias/{id}` | Renomeia |
 | DELETE | `/api/categorias/{id}` | Exclui, desde que não tenha lançamentos |
 
+## Lançamentos
+
+O tipo (`RECEITA` ou `DESPESA`) vem da categoria escolhida. A `natureza` diferencia contas fixas (`FIXA`: aluguel, internet) de gastos avulsos (`VARIAVEL`, o padrão).
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/lancamentos` | Cria um lançamento (pode já nascer pago) |
+| GET | `/api/lancamentos` | Lista com filtros, paginação e ordenação |
+| GET | `/api/lancamentos/{id}` | Busca um lançamento |
+| PUT | `/api/lancamentos/{id}` | Atualiza |
+| DELETE | `/api/lancamentos/{id}` | Exclui |
+| POST | `/api/lancamentos/{id}/pagamento` | Marca como pago (data opcional, padrão hoje) |
+| DELETE | `/api/lancamentos/{id}/pagamento` | Desfaz o pagamento |
+
+### Filtros da listagem
+
+| Parâmetro | Exemplo | Descrição |
+|---|---|---|
+| `inicio`, `fim` | `2026-10-01` | Período pela data do lançamento |
+| `tipo` | `DESPESA` | Receita ou despesa |
+| `natureza` | `FIXA` | Fixa ou variável |
+| `categoriaId` | UUID | Uma categoria específica |
+| `paga` | `true` | Pagos ou em aberto |
+| `vencidos` | `true` | Em aberto com vencimento anterior a hoje |
+| `busca` | `mercado` | Texto contido na descrição |
+| `page`, `size` | `0`, `20` | Paginação (máximo de 100 por página) |
+| `sort` | `valor,desc` | Ordenação por `dataLancamento`, `dataVencimento`, `valor`, `descricao` ou `criadoEm` |
+
 ## Status
 
 Em desenvolvimento.
