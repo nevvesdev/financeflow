@@ -75,6 +75,8 @@ Enviar o token no header `Authorization: Bearer <token>`.
 | `JWT_EXPIRACAO` | `2h` | Validade do token |
 | `CORS_ORIGENS` | `http://localhost:4200` | Origens permitidas, separadas por vírgula |
 | `FUSO_HORARIO` | `America/Sao_Paulo` | Fuso usado para calcular "hoje" e vencimentos |
+| `AGENDAMENTO_HABILITADO` | `true` | Liga ou desliga os jobs agendados |
+| `RECORRENCIAS_CRON` | `0 0 6 * * *` | Horário do job de geração de recorrências (no fuso configurado) |
 
 Em produção, sempre defina `JWT_SEGREDO` com um valor forte e exclusivo.
 
@@ -130,6 +132,28 @@ O tipo (`RECEITA` ou `DESPESA`) vem da categoria escolhida. A `natureza` diferen
 | `despesasPorNatureza` | Despesas do mês separadas em fixas e variáveis |
 
 As somas são calculadas no banco, e a lista de contas a vencer traz no máximo 50 itens, com `quantidade` e `valorTotal` cobrindo todas.
+
+## Contas fixas recorrentes
+
+Cadastre aluguel, internet, luz ou um salário uma vez, e o sistema gera o lançamento de cada mês com o valor estimado. Quando a conta chega, basta ajustar o valor do lançamento.
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/recorrencias` | Cria e já gera o mês atual e o próximo |
+| GET | `/api/recorrencias?ativa=` | Lista, com filtro opcional por status |
+| GET | `/api/recorrencias/{id}` | Busca uma recorrência |
+| PUT | `/api/recorrencias/{id}` | Atualiza (vale apenas para as próximas gerações) |
+| POST | `/api/recorrencias/{id}/pausar` | Pausa a geração |
+| POST | `/api/recorrencias/{id}/retomar` | Retoma sem gerar meses passados |
+| DELETE | `/api/recorrencias/{id}` | Exclui, mantendo os lançamentos já gerados |
+
+Regras de geração:
+
+- Um job diário garante os lançamentos do mês atual e do próximo.
+- Dia de vencimento 31 em meses curtos vira o último dia do mês.
+- O job é idempotente: rodar duas vezes, ou em duas instâncias, não duplica lançamentos.
+- Um lançamento excluído pelo usuário não é recriado.
+- Os lançamentos gerados têm natureza `FIXA` e entram normalmente no painel e na lista de contas a vencer.
 
 ## Status
 
