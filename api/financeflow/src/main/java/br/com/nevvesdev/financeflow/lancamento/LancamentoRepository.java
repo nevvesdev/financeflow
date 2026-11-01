@@ -15,6 +15,8 @@ public interface LancamentoRepository
 
     Optional<Lancamento> findByIdAndUsuarioId(UUID id, UUID usuarioId);
 
+    boolean existsByCategoriaId(UUID categoriaId);
+
     @Query("""
             select l
             from Lancamento l
