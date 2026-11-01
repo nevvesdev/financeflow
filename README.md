@@ -77,6 +77,7 @@ Enviar o token no header `Authorization: Bearer <token>`.
 | `FUSO_HORARIO` | `America/Sao_Paulo` | Fuso usado para calcular "hoje" e vencimentos |
 | `AGENDAMENTO_HABILITADO` | `true` | Liga ou desliga os jobs agendados |
 | `RECORRENCIAS_CRON` | `0 0 6 * * *` | Horário do job de geração de recorrências (no fuso configurado) |
+| `NOTIFICACOES_CRON` | `0 30 7 * * *` | Horário do job de avisos de vencimento (no fuso configurado) |
 
 Em produção, sempre defina `JWT_SEGREDO` com um valor forte e exclusivo.
 
@@ -154,6 +155,19 @@ Regras de geração:
 - O job é idempotente: rodar duas vezes, ou em duas instâncias, não duplica lançamentos.
 - Um lançamento excluído pelo usuário não é recriado.
 - Os lançamentos gerados têm natureza `FIXA` e entram normalmente no painel e na lista de contas a vencer.
+
+## Notificações
+
+Um job diário avisa sobre despesas em aberto: três dias antes do vencimento, no dia e quando atrasam (até 30 dias). Cada conta gera no máximo um aviso de cada tipo, e rodar o job de novo não duplica nada.
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/api/notificacoes?naoLidas=` | Lista os avisos, mais recentes primeiro |
+| GET | `/api/notificacoes/nao-lidas/total` | Total de avisos não lidos |
+| POST | `/api/notificacoes/{id}/leitura` | Marca um aviso como lido |
+| POST | `/api/notificacoes/leitura` | Marca todos como lidos |
+
+Os avisos são entregues por canais plugáveis (`CanalDeNotificacao`). O canal atual escreve no log, sem o texto do aviso. Se um canal falhar, o aviso fica pendente e é reenviado na próxima execução. A entrega garante pelo menos uma vez, e o despacho assume uma única instância da API.
 
 ## Status
 
