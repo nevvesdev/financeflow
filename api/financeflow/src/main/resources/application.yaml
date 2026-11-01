@@ -30,6 +30,10 @@ management:
 
 financeflow:
   fuso-horario: ${FUSO_HORARIO:America/Sao_Paulo}
+  agendamento:
+    habilitado: ${AGENDAMENTO_HABILITADO:true}
+  recorrencias:
+    cron: "${RECORRENCIAS_CRON:0 0 6 * * *}"
   jwt:
     segredo: ${JWT_SEGREDO:chave-somente-para-desenvolvimento-local-0123456789}
     expiracao: ${JWT_EXPIRACAO:2h}
