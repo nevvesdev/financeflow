@@ -21,7 +21,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -160,18 +159,7 @@ public class Lancamento {
     }
 
     private static BigDecimal normalizarValor(BigDecimal valor) {
-        Validacao.obrigatorio(valor, "valor");
-        if (valor.signum() <= 0) {
-            throw new RegraDeNegocioException("valor deve ser maior que zero");
-        }
-        if (valor.stripTrailingZeros().scale() > ESCALA_VALOR) {
-            throw new RegraDeNegocioException("valor deve ter no máximo duas casas decimais");
-        }
-        BigDecimal normalizado = valor.setScale(ESCALA_VALOR, RoundingMode.UNNECESSARY);
-        if (normalizado.precision() > PRECISAO_VALOR) {
-            throw new RegraDeNegocioException("valor excede o limite permitido");
-        }
-        return normalizado;
+        return Validacao.valorMonetario(valor);
     }
 
     public UUID getId() {
