@@ -1,0 +1,97 @@
+:root,
+:root[data-tema='escuro'] {
+  color-scheme: dark;
+
+  --cor-fundo: #0c0c0e;
+  --cor-superficie: #141416;
+  --cor-superficie-realce: #1c1c1f;
+  --cor-borda: rgb(255 255 255 / 8%);
+  --cor-borda-forte: rgb(255 255 255 / 15%);
+  --cor-texto: #fafafa;
+  --cor-texto-suave: #a1a1aa;
+  --cor-texto-fraco: #8b8b95;
+
+  --cor-destaque: #2563eb;
+  --cor-destaque-forte: #1d4ed8;
+  --cor-sobre-destaque: #ffffff;
+  --cor-destaque-texto: #60a5fa;
+  --cor-destaque-suave: rgb(59 130 246 / 16%);
+  --cor-foco: #60a5fa;
+
+  --cor-receita: #34d399;
+  --cor-despesa: #fb7185;
+  --cor-alerta: #fbbf24;
+  --cor-erro: #fca5a5;
+  --cor-erro-fundo: rgb(239 68 68 / 12%);
+  --cor-erro-borda: rgb(239 68 68 / 40%);
+
+  --brilho-destaque: rgb(59 130 246 / 14%);
+  --sombra-cartao: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 16px 40px rgb(0 0 0 / 40%);
+}
+
+:root[data-tema='claro'] {
+  color-scheme: light;
+
+  --cor-fundo: #f5f6f8;
+  --cor-superficie: #ffffff;
+  --cor-superficie-realce: #f1f2f5;
+  --cor-borda: rgb(10 10 20 / 10%);
+  --cor-borda-forte: rgb(10 10 20 / 18%);
+  --cor-texto: #0a0a0f;
+  --cor-texto-suave: #565a66;
+  --cor-texto-fraco: #6b7280;
+
+  --cor-destaque: #2563eb;
+  --cor-destaque-forte: #1d4ed8;
+  --cor-sobre-destaque: #ffffff;
+  --cor-destaque-texto: #1d4ed8;
+  --cor-destaque-suave: rgb(37 99 235 / 10%);
+  --cor-foco: #2563eb;
+
+  --cor-receita: #047857;
+  --cor-despesa: #be123c;
+  --cor-alerta: #b45309;
+  --cor-erro: #b42318;
+  --cor-erro-fundo: #fef3f2;
+  --cor-erro-borda: #fda29b;
+
+  --brilho-destaque: rgb(37 99 235 / 8%);
+  --sombra-cartao: 0 1px 2px rgb(10 10 20 / 6%), 0 12px 32px rgb(10 10 20 / 8%);
+}
+
+:root {
+  --fonte: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-md: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+  --texto-destaque: 2.25rem;
+
+  --raio-cartao: 20px;
+  --raio-controle: 12px;
+  --raio-pilula: 999px;
+
+  --espaco-1: 0.25rem;
+  --espaco-2: 0.5rem;
+  --espaco-3: 0.75rem;
+  --espaco-4: 1rem;
+  --espaco-5: 1.5rem;
+  --espaco-6: 2rem;
+  --espaco-7: 3rem;
+
+  --movimento-rapido: 120ms;
+  --movimento-medio: 220ms;
+  --movimento-lento: 360ms;
+  --curva-padrao: cubic-bezier(0.2, 0, 0, 1);
+  --curva-mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --movimento-rapido: 0ms;
+    --movimento-medio: 0ms;
+    --movimento-lento: 0ms;
+  }
+}
