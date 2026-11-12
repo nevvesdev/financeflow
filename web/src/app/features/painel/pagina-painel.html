@@ -1,0 +1,27 @@
+<section class="painel">
+  <header class="painel__cabecalho">
+    <h1 class="painel__titulo">Olá{{ primeiroNome() ? ', ' + primeiroNome() : '' }}!</h1>
+    <p class="painel__subtitulo">Sua sessão está ativa e a comunicação com a API está funcionando.</p>
+  </header>
+
+  <div class="painel__estatisticas" role="list" aria-label="Resumo do mês, em preparação">
+    @for (estatistica of estatisticas; track estatistica) {
+    <article class="cartao cartao--suave" role="listitem">
+      <p class="cartao__descricao">{{ estatistica }}</p>
+      <div class="esqueleto esqueleto--valor" aria-hidden="true"></div>
+      <div class="esqueleto esqueleto--linha" aria-hidden="true"></div>
+    </article>
+    }
+  </div>
+
+  <article class="cartao">
+    <header class="cartao__cabecalho">
+      <div class="cartao__titulos">
+        <h2 class="cartao__titulo">Painel em construção</h2>
+        <p class="cartao__descricao">
+          Saldo do mês, contas a vencer e gastos por categoria chegam na próxima fase.
+        </p>
+      </div>
+    </header>
+  </article>
+</section>

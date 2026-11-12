@@ -1,0 +1,72 @@
+<div class="aplicacao" [class.aplicacao--recolhida]="recolhido()">
+  <aside class="menu" aria-label="Navegação principal">
+    <div class="menu__topo">
+      <a class="menu__marca" routerLink="/painel" aria-label="FinanceFlow, ir para o painel">
+        <app-marca [compacta]="recolhido()" />
+      </a>
+      <button
+        class="botao botao--fantasma botao--icone menu__recolher"
+        type="button"
+        (click)="alternarMenu()"
+        [attr.aria-label]="recolhido() ? 'Expandir menu' : 'Recolher menu'"
+        [attr.aria-expanded]="!recolhido()"
+      >
+        <svg class="menu__icone menu__seta" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="menu__navegacao" [style.--indice]="indiceAtivo()">
+      <span
+        class="menu__indicador"
+        [class.menu__indicador--oculto]="indiceAtivo() < 0"
+        aria-hidden="true"
+      ></span>
+      @for (item of itens; track item.rota) {
+      <a
+        class="menu__item"
+        [routerLink]="item.rota"
+        routerLinkActive="menu__item--ativo"
+        ariaCurrentWhenActive="page"
+        [attr.title]="recolhido() ? item.rotulo : null"
+      >
+        <svg class="menu__icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path [attr.d]="item.icone" />
+        </svg>
+        <span class="menu__rotulo">{{ item.rotulo }}</span>
+      </a>
+      }
+    </nav>
+
+    <div class="menu__rodape">
+      @if (usuario(); as pessoa) {
+      <div class="menu__usuario">
+        <span class="avatar" aria-hidden="true">{{ iniciais() }}</span>
+        <div class="menu__dados">
+          <strong>{{ pessoa.nome }}</strong>
+          <span>{{ pessoa.email }}</span>
+        </div>
+      </div>
+      }
+      <div class="menu__acoes">
+        <app-alternador-tema />
+        <button
+          class="botao botao--fantasma botao--icone"
+          type="button"
+          (click)="sair()"
+          aria-label="Sair"
+          title="Sair"
+        >
+          <svg class="menu__icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="conteudo">
+    <router-outlet />
+  </main>
+</div>

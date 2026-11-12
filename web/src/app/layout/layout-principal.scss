@@ -1,0 +1,256 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.aplicacao {
+  --largura-menu: 16rem;
+  --altura-item: 2.75rem;
+
+  display: grid;
+  grid-template-columns: var(--largura-menu) minmax(0, 1fr);
+  min-height: 100vh;
+  transition: grid-template-columns var(--movimento-medio) var(--curva-padrao);
+}
+
+.aplicacao--recolhida {
+  --largura-menu: 4.75rem;
+}
+
+.menu {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+  height: 100vh;
+  padding: var(--espaco-4);
+  overflow: hidden;
+  border-right: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+}
+
+.menu__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+  min-height: 2.5rem;
+}
+
+.menu__marca {
+  text-decoration: none;
+}
+
+.menu__icone {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.menu__seta {
+  transition: transform var(--movimento-medio) var(--curva-padrao);
+}
+
+.aplicacao--recolhida .menu__seta {
+  transform: rotate(180deg);
+}
+
+.aplicacao--recolhida .menu__topo {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--espaco-3);
+}
+
+.menu__navegacao {
+  --passo: calc(var(--altura-item) + var(--espaco-1));
+
+  position: relative;
+  display: grid;
+  gap: var(--espaco-1);
+}
+
+.menu__indicador {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--altura-item);
+  border-radius: var(--raio-controle);
+  background: var(--cor-destaque-suave);
+  transform: translateY(calc(var(--indice, 0) * var(--passo)));
+  transition:
+    transform var(--movimento-medio) var(--curva-mola),
+    opacity var(--movimento-rapido) linear;
+}
+
+.menu__indicador--oculto {
+  opacity: 0;
+}
+
+.menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  height: var(--altura-item);
+  padding: 0 var(--espaco-3);
+  border-radius: var(--raio-controle);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--movimento-rapido) var(--curva-padrao);
+
+  &:hover {
+    color: var(--cor-texto);
+  }
+}
+
+.menu__item--ativo {
+  color: var(--cor-destaque-texto);
+}
+
+.menu__rotulo,
+.menu__dados {
+  white-space: nowrap;
+  transition: opacity var(--movimento-rapido) linear;
+}
+
+.aplicacao--recolhida .menu__rotulo,
+.aplicacao--recolhida .menu__dados {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu__rodape {
+  display: grid;
+  gap: var(--espaco-3);
+  margin-top: auto;
+  padding-top: var(--espaco-4);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.menu__usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-width: 0;
+}
+
+.menu__dados {
+  display: grid;
+  min-width: 0;
+  font-size: var(--texto-sm);
+
+  strong,
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span {
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-xs);
+  }
+}
+
+.menu__acoes {
+  display: flex;
+  gap: var(--espaco-1);
+}
+
+.aplicacao--recolhida .menu__acoes {
+  flex-direction: column;
+}
+
+.avatar {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.conteudo {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--espaco-6) var(--espaco-5);
+}
+
+@media (max-width: 56rem) {
+  .aplicacao,
+  .aplicacao--recolhida {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .menu {
+    z-index: 10;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espaco-3);
+    height: auto;
+    padding: var(--espaco-3) var(--espaco-4);
+    border-right: 0;
+    border-bottom: 1px solid var(--cor-borda);
+  }
+
+  .menu__topo,
+  .aplicacao--recolhida .menu__topo {
+    flex: none;
+    flex-direction: row;
+  }
+
+  .menu__recolher,
+  .menu__indicador,
+  .menu__dados {
+    display: none;
+  }
+
+  .menu__navegacao {
+    display: flex;
+    flex: 1;
+  }
+
+  .menu__item--ativo {
+    background: var(--cor-destaque-suave);
+  }
+
+  .aplicacao--recolhida .menu__rotulo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu__rodape {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .aplicacao--recolhida .menu__acoes {
+    flex-direction: row;
+  }
+
+  .conteudo {
+    padding: var(--espaco-5) var(--espaco-4);
+  }
+}
+
+@media (max-width: 36rem) {
+  .menu__rotulo {
+    display: none;
+  }
+}

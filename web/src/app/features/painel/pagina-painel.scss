@@ -1,0 +1,26 @@
+.painel {
+  display: grid;
+  gap: var(--espaco-5);
+}
+
+.painel__cabecalho {
+  display: grid;
+  gap: var(--espaco-1);
+}
+
+.painel__titulo {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.painel__subtitulo {
+  color: var(--cor-texto-suave);
+}
+
+.painel__estatisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--espaco-4);
+}
