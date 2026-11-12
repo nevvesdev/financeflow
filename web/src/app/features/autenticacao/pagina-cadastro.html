@@ -1,0 +1,100 @@
+<main class="autenticacao">
+  <div class="autenticacao__conteudo">
+    <app-marca />
+
+    <section class="cartao autenticacao__cartao" aria-labelledby="titulo-cadastro">
+      <header class="cartao__cabecalho">
+        <div class="cartao__titulos">
+          <h1 id="titulo-cadastro" class="cartao__titulo">Criar sua conta</h1>
+          <p class="cartao__descricao">Leva menos de um minuto e já vem com categorias prontas.</p>
+        </div>
+      </header>
+
+      <form
+        class="autenticacao__formulario"
+        [formGroup]="formulario"
+        (ngSubmit)="cadastrar()"
+        novalidate
+      >
+        <div class="campo">
+          <label for="nome">Nome</label>
+          <input
+            id="nome"
+            type="text"
+            formControlName="nome"
+            autocomplete="name"
+            [attr.aria-invalid]="mensagemDoCampo('nome') ? 'true' : null"
+          />
+          @if (mensagemDoCampo('nome'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            inputmode="email"
+            [attr.aria-invalid]="mensagemDoCampo('email') ? 'true' : null"
+          />
+          @if (mensagemDoCampo('email'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <div class="campo__senha">
+            <input
+              id="senha"
+              [type]="senhaVisivel() ? 'text' : 'password'"
+              formControlName="senha"
+              autocomplete="new-password"
+              [attr.aria-invalid]="mensagemDoCampo('senha') ? 'true' : null"
+            />
+            <button
+              type="button"
+              class="campo__alternar"
+              (click)="alternarSenha()"
+              [attr.aria-pressed]="senhaVisivel()"
+            >
+              {{ senhaVisivel() ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+          @if (mensagemDoCampo('senha'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="confirmacao">Confirmar senha</label>
+          <input
+            id="confirmacao"
+            [type]="senhaVisivel() ? 'text' : 'password'"
+            formControlName="confirmacao"
+            autocomplete="new-password"
+            [attr.aria-invalid]="mensagemDoCampo('confirmacao') ? 'true' : null"
+          />
+          @if (mensagemDoCampo('confirmacao'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          }
+        </div>
+
+        @if (erroGeral(); as mensagem) {
+        <p class="alerta alerta--erro" role="alert">{{ mensagem }}</p>
+        }
+
+        <button class="botao botao--primario botao--cheio" type="submit" [disabled]="enviando()">
+          {{ enviando() ? 'Criando conta…' : 'Criar conta' }}
+        </button>
+      </form>
+
+      <footer class="cartao__rodape autenticacao__rodape">
+        Já tem conta? <a class="link" routerLink="/login">Entrar</a>
+      </footer>
+    </section>
+  </div>
+</main>

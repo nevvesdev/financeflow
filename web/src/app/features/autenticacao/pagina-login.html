@@ -1,0 +1,69 @@
+<main class="autenticacao">
+  <div class="autenticacao__conteudo">
+    <app-marca />
+
+    <section class="cartao autenticacao__cartao" aria-labelledby="titulo-login">
+      <header class="cartao__cabecalho">
+        <div class="cartao__titulos">
+          <h1 id="titulo-login" class="cartao__titulo">Entrar na sua conta</h1>
+          <p class="cartao__descricao">
+            Acompanhe seus gastos e contas a vencer em um só lugar.
+          </p>
+        </div>
+      </header>
+
+      <form class="autenticacao__formulario" [formGroup]="formulario" (ngSubmit)="entrar()" novalidate>
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            inputmode="email"
+            [attr.aria-invalid]="formulario.controls.email.touched && formulario.controls.email.invalid ? 'true' : null"
+          />
+          @if (formulario.controls.email.touched && formulario.controls.email.invalid) {
+          <p class="campo__erro" role="alert">Informe um e-mail válido.</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <div class="campo__senha">
+            <input
+              id="senha"
+              [type]="senhaVisivel() ? 'text' : 'password'"
+              formControlName="senha"
+              autocomplete="current-password"
+              [attr.aria-invalid]="formulario.controls.senha.touched && formulario.controls.senha.invalid ? 'true' : null"
+            />
+            <button
+              type="button"
+              class="campo__alternar"
+              (click)="alternarSenha()"
+              [attr.aria-pressed]="senhaVisivel()"
+            >
+              {{ senhaVisivel() ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+          @if (formulario.controls.senha.touched && formulario.controls.senha.invalid) {
+          <p class="campo__erro" role="alert">Informe sua senha.</p>
+          }
+        </div>
+
+        @if (erroGeral(); as mensagem) {
+        <p class="alerta alerta--erro" role="alert">{{ mensagem }}</p>
+        }
+
+        <button class="botao botao--primario botao--cheio" type="submit" [disabled]="enviando()">
+          {{ enviando() ? 'Entrando…' : 'Entrar' }}
+        </button>
+      </form>
+
+      <footer class="cartao__rodape autenticacao__rodape">
+        Ainda não tem conta? <a class="link" routerLink="/cadastro">Criar conta</a>
+      </footer>
+    </section>
+  </div>
+</main>

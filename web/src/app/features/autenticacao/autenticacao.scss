@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.autenticacao {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--espaco-5);
+  background:
+    radial-gradient(48rem 24rem at 50% -8%, var(--brilho-destaque), transparent),
+    var(--cor-fundo);
+}
+
+.autenticacao__conteudo {
+  display: grid;
+  justify-items: center;
+  gap: var(--espaco-5);
+  width: 100%;
+  max-width: 26rem;
+}
+
+.autenticacao__cartao {
+  width: 100%;
+  animation: entrada var(--movimento-lento) var(--curva-padrao) both;
+}
+
+.autenticacao__formulario {
+  display: grid;
+  gap: var(--espaco-4);
+}
+
+.autenticacao__rodape {
+  text-align: center;
+}
+
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
