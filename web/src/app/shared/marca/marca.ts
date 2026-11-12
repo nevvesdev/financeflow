@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-marca',
@@ -13,23 +13,29 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         aria-hidden="true"
         focusable="false"
       >
-        <rect width="32" height="32" rx="9" fill="currentColor" />
+        <rect width="32" height="32" rx="10" fill="currentColor" />
         <path class="marca__linha" d="M8 21l5-6 4 3 7-9" />
       </svg>
-      <span class="marca__nome">FinanceFlow</span>
+      @if (!compacta()) {
+        <span class="marca__nome">FinanceFlow</span>
+      }
     </span>
   `,
   styles: `
     .marca {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      color: var(--cor-primaria);
+      gap: var(--espaco-3);
+      color: var(--cor-destaque);
+    }
+
+    .marca__icone {
+      flex: none;
     }
 
     .marca__linha {
       fill: none;
-      stroke: var(--cor-sobre-primaria);
+      stroke: var(--cor-sobre-destaque);
       stroke-width: 2.6;
       stroke-linecap: round;
       stroke-linejoin: round;
@@ -37,10 +43,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
     .marca__nome {
       color: var(--cor-texto);
-      font-size: 1.15rem;
+      font-size: var(--texto-lg);
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
   `,
 })
-export class Marca {}
+export class Marca {
+  readonly compacta = input(false);
+}
