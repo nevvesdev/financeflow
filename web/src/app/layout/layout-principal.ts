@@ -31,11 +31,16 @@ export class LayoutPrincipal {
   private readonly autenticacao = inject(AutenticacaoService);
   private readonly roteador = inject(Router);
 
-  readonly itens: readonly ItemMenu[] = [
+    readonly itens: readonly ItemMenu[] = [
     {
       rotulo: 'Painel',
       rota: '/painel',
       icone: 'M3 3h7v9H3z M14 3h7v5h-7z M14 12h7v9h-7z M3 16h7v5H3z',
+    },
+    {
+      rotulo: 'Lançamentos',
+      rota: '/lancamentos',
+      icone: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',
     },
   ];
 

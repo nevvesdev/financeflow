@@ -28,6 +28,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/painel/pagina-painel').then((modulo) => modulo.PaginaPainel),
       },
+      {
+        path: 'lancamentos',
+        title: 'Lançamentos · FinanceFlow',
+        loadComponent: () =>
+          import('./features/lancamentos/pagina-lancamentos').then(
+            (modulo) => modulo.PaginaLancamentos,
+          ),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'painel' },
     ],
   },
