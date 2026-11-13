@@ -286,6 +286,7 @@ web/src/
 ### Telas
 
 - **Painel:** saldo, entradas e saídas do mês (previsto e realizado), contas a vencer com as atrasadas em destaque e marcação de pagamento direto na lista, gastos por categoria e divisão entre despesas fixas e variáveis. Navegação por mês.
+- **Lançamentos:** tabela com abas por tipo, seletor de período (atalhos e intervalo personalizado), filtros por busca, categoria, natureza e situação, ordenação por coluna, paginação, marcação e desfazer de pagamento e exclusão com confirmação.
 
 
 ### Design system
