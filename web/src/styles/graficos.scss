@@ -1,0 +1,94 @@
+.progresso {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-borda-forte);
+}
+
+.progresso--grossa {
+  height: 10px;
+}
+
+.progresso__preenchimento {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cor-destaque);
+  transform-origin: left;
+  animation: crescer var(--movimento-lento) var(--curva-padrao) both;
+}
+
+.progresso__preenchimento--receita {
+  background: var(--cor-receita);
+}
+
+.progresso__preenchimento--despesa {
+  background: var(--cor-despesa);
+}
+
+.segmentos {
+  display: flex;
+  gap: 2px;
+  height: 12px;
+  overflow: hidden;
+  border-radius: var(--raio-pilula);
+}
+
+.segmentos__parte {
+  height: 100%;
+  transform-origin: left;
+  animation: crescer var(--movimento-lento) var(--curva-padrao) both;
+}
+
+.segmentos__parte--fixas {
+  background: var(--cor-destaque);
+}
+
+.segmentos__parte--variaveis {
+  background: var(--cor-texto-fraco);
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) var(--espaco-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legenda__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+
+  strong {
+    color: var(--cor-texto);
+  }
+}
+
+.legenda__ponto {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: var(--raio-pilula);
+}
+
+.legenda__ponto--fixas {
+  background: var(--cor-destaque);
+}
+
+.legenda__ponto--variaveis {
+  background: var(--cor-texto-fraco);
+}
+
+@keyframes crescer {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
