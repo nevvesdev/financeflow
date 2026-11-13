@@ -1,27 +1,198 @@
 <section class="painel">
   <header class="painel__cabecalho">
-    <h1 class="painel__titulo">Olá{{ primeiroNome() ? ', ' + primeiroNome() : '' }}!</h1>
-    <p class="painel__subtitulo">Sua sessão está ativa e a comunicação com a API está funcionando.</p>
+    <div class="painel__titulos">
+      <h1 class="painel__titulo">Olá{{ primeiroNome() ? ', ' + primeiroNome() : '' }}!</h1>
+      <p class="painel__subtitulo">Resumo financeiro de {{ rotuloMes() }}</p>
+    </div>
+    <app-seletor-mes [mes]="mes()" (mesAlterado)="alterarMes($event)" />
   </header>
 
-  <div class="painel__estatisticas" role="list" aria-label="Resumo do mês, em preparação">
-    @for (estatistica of estatisticas; track estatistica) {
-    <article class="cartao cartao--suave" role="listitem">
-      <p class="cartao__descricao">{{ estatistica }}</p>
-      <div class="esqueleto esqueleto--valor" aria-hidden="true"></div>
-      <div class="esqueleto esqueleto--linha" aria-hidden="true"></div>
-    </article>
-    }
+  @if (erro(); as mensagem) {
+  <div class="cartao painel__erro" role="alert">
+    <p>{{ mensagem }}</p>
+    <button class="botao botao--secundario" type="button" (click)="recarregar()">
+      Tentar novamente
+    </button>
   </div>
-
-  <article class="cartao">
-    <header class="cartao__cabecalho">
-      <div class="cartao__titulos">
-        <h2 class="cartao__titulo">Painel em construção</h2>
-        <p class="cartao__descricao">
-          Saldo do mês, contas a vencer e gastos por categoria chegam na próxima fase.
+  } @else if (painel(); as dados) {
+  <div class="painel__conteudo" [class.painel__conteudo--atualizando]="carregando()" [attr.aria-busy]="carregando()">
+    <div class="painel__estatisticas">
+      <article class="cartao cartao--suave painel__estatistica">
+        <p class="cartao__descricao">Saldo do mês</p>
+        <p class="painel__valor" [class.painel__valor--negativo]="dados.previsto.saldo < 0">
+          {{ dados.previsto.saldo | moeda }}
         </p>
+        <p class="painel__detalhe">
+          Realizado até agora: <strong>{{ dados.realizado.saldo | moeda }}</strong>
+        </p>
+      </article>
+
+      <article class="cartao cartao--suave painel__estatistica">
+        <p class="cartao__descricao">Entradas</p>
+        <p class="painel__valor painel__valor--receita">{{ dados.previsto.entradas | moeda }}</p>
+        <div
+          class="progresso"
+          role="img"
+          [attr.aria-label]="'Recebido: ' + (percentualRealizado(dados.realizado.entradas, dados.previsto.entradas) | percentual) + ' do previsto'"
+        >
+            <span
+              class="progresso__preenchimento progresso__preenchimento--receita"
+              [style.width.%]="percentualRealizado(dados.realizado.entradas, dados.previsto.entradas)"
+            ></span>
+        </div>
+        <p class="painel__detalhe">
+          <strong>{{ dados.realizado.entradas | moeda }}</strong> recebidos
+        </p>
+      </article>
+
+      <article class="cartao cartao--suave painel__estatistica">
+        <p class="cartao__descricao">Saídas</p>
+        <p class="painel__valor painel__valor--despesa">{{ dados.previsto.saidas | moeda }}</p>
+        <div
+          class="progresso"
+          role="img"
+          [attr.aria-label]="'Pago: ' + (percentualRealizado(dados.realizado.saidas, dados.previsto.saidas) | percentual) + ' do previsto'"
+        >
+            <span
+              class="progresso__preenchimento progresso__preenchimento--despesa"
+              [style.width.%]="percentualRealizado(dados.realizado.saidas, dados.previsto.saidas)"
+            ></span>
+        </div>
+        <p class="painel__detalhe">
+          <strong>{{ dados.realizado.saidas | moeda }}</strong> pagos
+        </p>
+      </article>
+    </div>
+
+    <article class="cartao">
+      <header class="cartao__cabecalho">
+        <div class="cartao__titulos">
+          <h2 class="cartao__titulo">Contas a vencer</h2>
+          <p class="cartao__descricao">Até {{ dados.contasAVencer.ate | dataCurta }}, incluindo as atrasadas</p>
+        </div>
+        @if (dados.contasAVencer.quantidade > 0) {
+        <div class="cartao__acoes">
+              <span class="painel__total">
+                {{ dados.contasAVencer.quantidade }}
+                {{ dados.contasAVencer.quantidade === 1 ? 'conta' : 'contas' }}
+                · {{ dados.contasAVencer.valorTotal | moeda }}
+              </span>
+        </div>
+        }
+      </header>
+
+      @if (dados.contasAVencer.itens.length === 0) {
+      <p class="painel__vazio">Nenhuma conta a vencer nos próximos 7 dias. Tudo em dia.</p>
+      } @else {
+      <ul class="contas">
+        @for (conta of dados.contasAVencer.itens; track conta.id) {
+        <li class="conta" [class.conta--vencida]="conta.vencido">
+          <div class="conta__principal">
+            <p class="conta__descricao">{{ conta.descricao }}</p>
+            <p class="conta__meta">{{ conta.categoriaNome }} · {{ conta.dataVencimento | dataCurta }}</p>
+          </div>
+          <span class="conta__prazo" [class.conta__prazo--vencida]="conta.vencido">
+                  {{ prazo(conta) }}
+                </span>
+          <span class="conta__valor">{{ conta.valor | moeda }}</span>
+          <button
+            class="botao botao--secundario conta__acao"
+            type="button"
+            (click)="marcarComoPaga(conta)"
+            [disabled]="pagando().has(conta.id)"
+          >
+            {{ pagando().has(conta.id) ? 'Salvando…' : 'Marcar como paga' }}
+          </button>
+        </li>
+        }
+      </ul>
+      }
+    </article>
+
+    <div class="painel__linha-dupla">
+      <article class="cartao">
+        <header class="cartao__cabecalho">
+          <div class="cartao__titulos">
+            <h2 class="cartao__titulo">Gastos por categoria</h2>
+            <p class="cartao__descricao">Despesas de {{ rotuloMes() }}</p>
+          </div>
+        </header>
+
+        @if (dados.gastosPorCategoria.length === 0) {
+        <p class="painel__vazio">Nenhuma despesa registrada neste mês.</p>
+        } @else {
+        <ul class="categorias">
+          @for (gasto of dados.gastosPorCategoria; track gasto.categoriaId) {
+          <li class="categoria">
+            <div class="categoria__linha">
+              <span class="categoria__nome">{{ gasto.categoriaNome }}</span>
+              <span class="categoria__valor">
+                      {{ gasto.total | moeda }}
+                      <small>{{ gasto.percentual | percentual }}</small>
+                    </span>
+            </div>
+            <div
+              class="progresso progresso--grossa"
+              role="img"
+              [attr.aria-label]="gasto.categoriaNome + ': ' + (gasto.percentual | percentual) + ' das despesas'"
+            >
+              <span class="progresso__preenchimento" [style.width.%]="gasto.percentual"></span>
+            </div>
+          </li>
+          }
+        </ul>
+        }
+      </article>
+
+      <article class="cartao">
+        <header class="cartao__cabecalho">
+          <div class="cartao__titulos">
+            <h2 class="cartao__titulo">Fixas e variáveis</h2>
+            <p class="cartao__descricao">Despesas de {{ rotuloMes() }}</p>
+          </div>
+        </header>
+
+        @if (totalDespesasPorNatureza() === 0) {
+        <p class="painel__vazio">Sem despesas neste mês.</p>
+        } @else {
+        <div
+          class="segmentos"
+          role="img"
+          [attr.aria-label]="'Fixas ' + (percentualFixas() | percentual) + ', variáveis ' + (percentualVariaveis() | percentual)"
+        >
+          <span class="segmentos__parte segmentos__parte--fixas" [style.width.%]="percentualFixas()"></span>
+          <span class="segmentos__parte segmentos__parte--variaveis" [style.width.%]="percentualVariaveis()"></span>
+        </div>
+        <ul class="legenda">
+          <li class="legenda__item">
+            <span class="legenda__ponto legenda__ponto--fixas"></span>
+            Fixas <strong>{{ dados.despesasPorNatureza.fixas | moeda }}</strong>
+          </li>
+          <li class="legenda__item">
+            <span class="legenda__ponto legenda__ponto--variaveis"></span>
+            Variáveis <strong>{{ dados.despesasPorNatureza.variaveis | moeda }}</strong>
+          </li>
+        </ul>
+        }
+      </article>
+    </div>
+  </div>
+  } @else {
+  <div class="painel__conteudo" aria-busy="true">
+    <div class="painel__estatisticas">
+      @for (indice of [1, 2, 3]; track indice) {
+      <div class="cartao cartao--suave">
+        <div class="esqueleto esqueleto--linha"></div>
+        <div class="esqueleto esqueleto--valor"></div>
+        <div class="esqueleto esqueleto--linha"></div>
       </div>
-    </header>
-  </article>
+      }
+    </div>
+    <div class="cartao">
+      <div class="esqueleto esqueleto--linha"></div>
+      <div class="esqueleto esqueleto--valor"></div>
+      <div class="esqueleto esqueleto--valor"></div>
+    </div>
+  </div>
+  }
 </section>

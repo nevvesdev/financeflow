@@ -4,6 +4,14 @@
 }
 
 .painel__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+}
+
+.painel__titulos {
   display: grid;
   gap: var(--espaco-1);
 }
@@ -19,8 +27,179 @@
   color: var(--cor-texto-suave);
 }
 
+.painel__conteudo {
+  display: grid;
+  gap: var(--espaco-5);
+  transition: opacity var(--movimento-medio) var(--curva-padrao);
+}
+
+.painel__conteudo--atualizando {
+  opacity: 0.55;
+}
+
 .painel__estatisticas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: var(--espaco-4);
+}
+
+.painel__estatistica {
+  align-content: start;
+  gap: var(--espaco-3);
+}
+
+.painel__valor {
+  font-size: var(--texto-destaque);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.painel__valor--receita {
+  color: var(--cor-receita);
+}
+
+.painel__valor--despesa,
+.painel__valor--negativo {
+  color: var(--cor-despesa);
+}
+
+.painel__detalhe {
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+
+  strong {
+    color: var(--cor-texto);
+  }
+}
+
+.painel__total {
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.painel__vazio {
+  padding: var(--espaco-5) 0;
+  color: var(--cor-texto-suave);
+  text-align: center;
+}
+
+.painel__erro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  border-color: var(--cor-erro-borda);
+  color: var(--cor-erro);
+}
+
+.painel__linha-dupla {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--espaco-4);
+}
+
+.contas,
+.categorias {
+  display: grid;
+  gap: var(--espaco-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.conta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: var(--espaco-4);
+  padding: var(--espaco-3) var(--espaco-4);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+}
+
+.conta--vencida {
+  box-shadow: inset 3px 0 0 var(--cor-despesa);
+}
+
+.conta__principal {
+  min-width: 0;
+}
+
+.conta__descricao {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conta__meta {
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-xs);
+}
+
+.conta__prazo {
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  white-space: nowrap;
+}
+
+.conta__prazo--vencida {
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--cor-despesa) 16%, transparent);
+  color: var(--cor-despesa);
+  font-weight: 600;
+}
+
+.conta__valor {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.categoria {
+  display: grid;
+  gap: var(--espaco-2);
+  padding: var(--espaco-2) 0;
+}
+
+.categoria__linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  font-size: var(--texto-sm);
+}
+
+.categoria__nome {
+  font-weight: 600;
+}
+
+.categoria__valor {
+  color: var(--cor-texto-suave);
+  white-space: nowrap;
+
+  small {
+    margin-left: var(--espaco-2);
+    font-size: var(--texto-xs);
+  }
+}
+
+@media (max-width: 56rem) {
+  .painel__linha-dupla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 40rem) {
+  .conta {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--espaco-2);
+  }
+
+  .conta__acao {
+    grid-column: 1 / -1;
+  }
 }
