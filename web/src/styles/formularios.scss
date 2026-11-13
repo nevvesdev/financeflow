@@ -1,0 +1,73 @@
+.sr-somente {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.selecao {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: var(--texto-sm);
+  transition:
+    border-color var(--movimento-rapido) var(--curva-padrao),
+    box-shadow var(--movimento-rapido) var(--curva-padrao);
+}
+
+.selecao:focus-visible {
+  border-color: var(--cor-destaque-texto);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--cor-destaque-suave);
+}
+
+.busca {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 14rem;
+  flex: 1;
+}
+
+.busca__icone {
+  position: absolute;
+  left: 0.8rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: var(--cor-texto-fraco);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.busca__campo {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: var(--texto-sm);
+  transition:
+    border-color var(--movimento-rapido) var(--curva-padrao),
+    box-shadow var(--movimento-rapido) var(--curva-padrao);
+}
+
+.busca__campo:focus-visible {
+  border-color: var(--cor-destaque-texto);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--cor-destaque-suave);
+}

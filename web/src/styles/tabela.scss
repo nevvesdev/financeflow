@@ -1,0 +1,155 @@
+.tabela-rolagem {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+
+  th,
+  td {
+    padding: var(--espaco-3);
+    border-bottom: 1px solid var(--cor-borda);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  thead th {
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background-color var(--movimento-rapido) var(--curva-padrao);
+  }
+
+  tbody tr:hover {
+    background: var(--cor-superficie-realce);
+  }
+
+  th.tabela__numerico,
+  td.tabela__numerico {
+    text-align: right;
+  }
+
+  tr.linha--vencida td:first-child {
+    box-shadow: inset 3px 0 0 var(--cor-despesa);
+  }
+}
+
+.tabela__ordenar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: color var(--movimento-rapido) var(--curva-padrao);
+
+  &:hover {
+    color: var(--cor-texto);
+  }
+}
+
+.tabela__valor {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tabela__valor--receita {
+  color: var(--cor-receita);
+}
+
+.tabela__acoes {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tabela__acao {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+  transition:
+    background-color var(--movimento-rapido) var(--curva-padrao),
+    color var(--movimento-rapido) var(--curva-padrao),
+    transform var(--movimento-rapido) var(--curva-padrao);
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--cor-borda-forte);
+    color: var(--cor-texto);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.92);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.tabela__acao--perigo:hover:not(:disabled) {
+  background: var(--cor-erro-fundo);
+  color: var(--cor-erro);
+}
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-superficie-realce);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.selo--pago {
+  background: color-mix(in srgb, var(--cor-receita) 16%, transparent);
+  color: var(--cor-receita);
+}
+
+.selo--vencido {
+  background: color-mix(in srgb, var(--cor-despesa) 16%, transparent);
+  color: var(--cor-despesa);
+}
+
+.selo--fixa {
+  background: var(--cor-destaque-suave);
+  color: var(--cor-destaque-texto);
+}
+
+@media (max-width: 56rem) {
+  .tabela__coluna-secundaria {
+    display: none;
+  }
+}
