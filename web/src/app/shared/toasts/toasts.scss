@@ -1,0 +1,85 @@
+.toasts {
+  position: fixed;
+  right: var(--espaco-5);
+  bottom: var(--espaco-5);
+  z-index: 50;
+  display: grid;
+  gap: var(--espaco-2);
+  width: min(22rem, calc(100vw - 2 * var(--espaco-4)));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-4);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+  box-shadow: var(--sombra-cartao);
+  pointer-events: auto;
+  animation: toast-entrada var(--movimento-lento) var(--curva-padrao) both;
+}
+
+.toast__ponto {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-destaque-texto);
+}
+
+.toast--sucesso .toast__ponto {
+  background: var(--cor-receita);
+}
+
+.toast--erro .toast__ponto {
+  background: var(--cor-despesa);
+}
+
+.toast__mensagem {
+  flex: 1;
+  font-size: var(--texto-sm);
+}
+
+.toast__fechar {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+  transition:
+    background-color var(--movimento-rapido) var(--curva-padrao),
+    color var(--movimento-rapido) var(--curva-padrao);
+
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    background: var(--cor-borda);
+    color: var(--cor-texto);
+  }
+}
+
+@keyframes toast-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

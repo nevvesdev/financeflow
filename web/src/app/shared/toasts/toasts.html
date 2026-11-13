@@ -1,0 +1,24 @@
+<div class="toasts" role="region" aria-label="Notificações" aria-live="polite">
+  @for (toast of toasts(); track toast.id) {
+  <div
+    class="toast"
+    [class.toast--sucesso]="toast.tipo === 'sucesso'"
+    [class.toast--erro]="toast.tipo === 'erro'"
+    [class.toast--info]="toast.tipo === 'info'"
+    [attr.role]="toast.tipo === 'erro' ? 'alert' : 'status'"
+  >
+    <span class="toast__ponto" aria-hidden="true"></span>
+    <p class="toast__mensagem">{{ toast.mensagem }}</p>
+    <button
+      class="toast__fechar"
+      type="button"
+      (click)="fechar(toast.id)"
+      aria-label="Fechar notificação"
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+  }
+</div>
