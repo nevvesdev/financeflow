@@ -283,6 +283,11 @@ web/src/
     └── shared/    componentes e utilitários reutilizáveis
 ```
 
+### Telas
+
+- **Painel:** saldo, entradas e saídas do mês (previsto e realizado), contas a vencer com as atrasadas em destaque e marcação de pagamento direto na lista, gastos por categoria e divisão entre despesas fixas e variáveis. Navegação por mês.
+
+
 ### Design system
 
 - **Tema:** escuro por padrão, claro opcional, alternado pelo botão do menu e lembrado no navegador. O atributo `data-tema` é definido antes do Angular carregar, para não piscar.
