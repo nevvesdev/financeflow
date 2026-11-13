@@ -1,0 +1,229 @@
+<section class="lancamentos">
+  <header class="lancamentos__cabecalho">
+    <div class="lancamentos__titulos">
+      <h1 class="lancamentos__titulo">Lançamentos</h1>
+      <p class="lancamentos__subtitulo">
+        Receitas e despesas, com filtros, ordenação e pagamento em um clique.
+      </p>
+    </div>
+  </header>
+
+  <article class="cartao lancamentos__cartao">
+    <div class="lancamentos__barra">
+      <app-abas
+        [itens]="abas"
+        [selecionada]="aba()"
+        idPainel="painel-lancamentos"
+        rotulo="Tipo de lançamento"
+        (selecionar)="selecionarAba($event)"
+      />
+      <app-seletor-periodo [periodo]="periodo()" (periodoAlterado)="alterarPeriodo($event)" />
+    </div>
+
+    <div class="lancamentos__filtros">
+      <div class="busca">
+        <svg class="busca__icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M21 21l-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z" />
+        </svg>
+        <label class="sr-somente" for="busca">Buscar lançamentos</label>
+        <input
+          id="busca"
+          class="busca__campo"
+          type="search"
+          placeholder="Buscar por descrição"
+          autocomplete="off"
+          [value]="buscaDigitada()"
+          (input)="aoDigitar($event)"
+        />
+      </div>
+
+      <label class="sr-somente" for="filtro-categoria">Categoria</label>
+      <select id="filtro-categoria" class="selecao" (change)="alterarCategoria($event)">
+        <option value="" [selected]="categoriaId() === ''">Todas as categorias</option>
+        @for (categoria of categoriasDoFiltro(); track categoria.id) {
+          <option [value]="categoria.id" [selected]="categoria.id === categoriaId()">
+            {{ categoria.nome }}
+          </option>
+        }
+      </select>
+
+      <label class="sr-somente" for="filtro-natureza">Natureza</label>
+      <select id="filtro-natureza" class="selecao" (change)="alterarNatureza($event)">
+        <option value="" [selected]="natureza() === ''">Fixas e variáveis</option>
+        <option value="FIXA" [selected]="natureza() === 'FIXA'">Somente fixas</option>
+        <option value="VARIAVEL" [selected]="natureza() === 'VARIAVEL'">Somente variáveis</option>
+      </select>
+
+      <label class="sr-somente" for="filtro-situacao">Situação</label>
+      <select id="filtro-situacao" class="selecao" (change)="alterarSituacao($event)">
+        <option value="" [selected]="situacao() === ''">Todas as situações</option>
+        <option value="ABERTOS" [selected]="situacao() === 'ABERTOS'">Em aberto</option>
+        <option value="PAGOS" [selected]="situacao() === 'PAGOS'">Pagos ou recebidos</option>
+        <option value="VENCIDOS" [selected]="situacao() === 'VENCIDOS'">Vencidos</option>
+      </select>
+
+      @if (temFiltros()) {
+        <button class="botao botao--fantasma" type="button" (click)="limparFiltros()">
+          Limpar filtros
+        </button>
+      }
+    </div>
+
+    <div
+      id="painel-lancamentos"
+      class="lancamentos__painel"
+      [class.lancamentos__painel--atualizando]="carregando() && resultado() !== null"
+      role="tabpanel"
+      [attr.aria-labelledby]="'aba-' + aba()"
+      [attr.aria-busy]="carregando()"
+    >
+      @if (erro(); as mensagem) {
+        <div class="lancamentos__erro" role="alert">
+          <p>{{ mensagem }}</p>
+          <button class="botao botao--secundario" type="button" (click)="recarregar()">
+            Tentar novamente
+          </button>
+        </div>
+      } @else if (resultado(); as dados) {
+        @if (dados.conteudo.length === 0) {
+          <div class="lancamentos__vazio">
+            <p class="lancamentos__vazio-titulo">Nenhum lançamento encontrado</p>
+            <p>
+              {{ temFiltros() ? 'Tente ajustar ou limpar os filtros.' : 'Não há lançamentos neste período.' }}
+            </p>
+            @if (temFiltros()) {
+              <button class="botao botao--secundario" type="button" (click)="limparFiltros()">
+                Limpar filtros
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="tabela-rolagem">
+            <table class="tabela">
+              <caption class="sr-somente">Lista de lançamentos</caption>
+              <thead>
+                <tr>
+                  <th scope="col" [attr.aria-sort]="ariaOrdenacao('dataLancamento')">
+                    <button class="tabela__ordenar" type="button" (click)="ordenarPor('dataLancamento')">
+                      Data <span aria-hidden="true">{{ setaDe('dataLancamento') }}</span>
+                    </button>
+                  </th>
+                  <th scope="col" [attr.aria-sort]="ariaOrdenacao('descricao')">
+                    <button class="tabela__ordenar" type="button" (click)="ordenarPor('descricao')">
+                      Descrição <span aria-hidden="true">{{ setaDe('descricao') }}</span>
+                    </button>
+                  </th>
+                  <th
+                    scope="col"
+                    class="tabela__coluna-secundaria"
+                    [attr.aria-sort]="ariaOrdenacao('dataVencimento')"
+                  >
+                    <button class="tabela__ordenar" type="button" (click)="ordenarPor('dataVencimento')">
+                      Vencimento <span aria-hidden="true">{{ setaDe('dataVencimento') }}</span>
+                    </button>
+                  </th>
+                  <th scope="col" class="tabela__numerico" [attr.aria-sort]="ariaOrdenacao('valor')">
+                    <button class="tabela__ordenar" type="button" (click)="ordenarPor('valor')">
+                      Valor <span aria-hidden="true">{{ setaDe('valor') }}</span>
+                    </button>
+                  </th>
+                  <th scope="col">Situação</th>
+                  <th scope="col" class="tabela__acoes"><span class="sr-somente">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (lancamento of dados.conteudo; track lancamento.id) {
+                  <tr [class.linha--vencida]="lancamento.vencido">
+                    <td>{{ lancamento.dataLancamento | dataCurta }}</td>
+                    <td>
+                      <p class="lancamentos__descricao">{{ lancamento.descricao }}</p>
+                      <p class="lancamentos__meta">
+                        {{ lancamento.categoriaNome }}
+                        @if (lancamento.natureza === 'FIXA') {
+                          <span class="selo selo--fixa">Fixa</span>
+                        }
+                      </p>
+                    </td>
+                    <td class="tabela__coluna-secundaria">
+                      {{ lancamento.dataVencimento ? (lancamento.dataVencimento | dataCurta) : '—' }}
+                    </td>
+                    <td
+                      class="tabela__numerico tabela__valor"
+                      [class.tabela__valor--receita]="lancamento.tipo === 'RECEITA'"
+                    >
+                      {{ sinalDoValor(lancamento) }}{{ lancamento.valor | moeda }}
+                    </td>
+                    <td>
+                      <span class="selo" [class]="'selo ' + classeSituacao(lancamento)">
+                        {{ rotuloSituacao(lancamento) }}
+                      </span>
+                    </td>
+                    <td class="tabela__acoes">
+                      <button
+                        class="tabela__acao"
+                        type="button"
+                        (click)="alternarPagamento(lancamento)"
+                        [disabled]="processando().has(lancamento.id)"
+                        [attr.aria-label]="rotuloAcaoPagamento(lancamento)"
+                        [attr.title]="rotuloAcaoPagamento(lancamento)"
+                      >
+                        @if (lancamento.paga) {
+                          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M9 14L4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+                          </svg>
+                        } @else {
+                          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        }
+                      </button>
+                      <button
+                        class="tabela__acao tabela__acao--perigo"
+                        type="button"
+                        (click)="pedirExclusao(lancamento)"
+                        [disabled]="processando().has(lancamento.id)"
+                        [attr.aria-label]="'Excluir ' + lancamento.descricao"
+                        title="Excluir"
+                      >
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      } @else {
+        <div class="lancamentos__esqueleto" aria-hidden="true">
+          @for (linha of [1, 2, 3, 4, 5, 6]; track linha) {
+            <div class="esqueleto lancamentos__esqueleto-linha"></div>
+          }
+        </div>
+      }
+    </div>
+
+    <footer class="lancamentos__rodape">
+      @if (resultado(); as dados) {
+        <p class="lancamentos__contagem">
+          {{ dados.totalElementos }} {{ dados.totalElementos === 1 ? 'lançamento' : 'lançamentos' }}
+        </p>
+        <app-paginacao
+          [pagina]="pagina()"
+          [totalPaginas]="dados.totalPaginas"
+          (paginaAlterada)="irParaPagina($event)"
+        />
+      }
+    </footer>
+  </article>
+
+  <app-dialogo-confirmacao
+    titulo="Excluir lançamento"
+    [mensagem]="mensagemExclusao()"
+    rotuloConfirmar="Excluir"
+    [perigo]="true"
+    (confirmado)="confirmarExclusao()"
+  />
+</section>
