@@ -1,0 +1,104 @@
+.campo select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+  color: var(--cor-texto);
+  font: inherit;
+  transition:
+    border-color var(--movimento-rapido) var(--curva-padrao),
+    box-shadow var(--movimento-rapido) var(--curva-padrao);
+}
+
+.campo select:focus-visible {
+  border-color: var(--cor-destaque-texto);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--cor-destaque-suave);
+}
+
+.campo select[aria-invalid='true'] {
+  border-color: var(--cor-erro-borda);
+}
+
+.campo__dica {
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-xs);
+}
+
+.grupo {
+  display: grid;
+  gap: var(--espaco-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.grupo__legenda {
+  padding: 0;
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.segmentado {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--espaco-1);
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-controle);
+  background: var(--cor-superficie-realce);
+}
+
+.segmentado__opcao {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9px;
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--movimento-rapido) var(--curva-padrao),
+    color var(--movimento-rapido) var(--curva-padrao);
+
+  input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  &:has(input:checked) {
+    background: var(--cor-destaque-suave);
+    color: var(--cor-destaque-texto);
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--cor-foco);
+    outline-offset: 2px;
+  }
+}
+
+.caixa {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  cursor: pointer;
+
+  input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0;
+    accent-color: var(--cor-destaque);
+    cursor: pointer;
+  }
+}
