@@ -2,7 +2,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { FiltroLancamentos, Lancamento, Ordenacao, Pagina } from './lancamento.modelos';
+import {
+  DadosLancamento,
+  FiltroLancamentos,
+  Lancamento,
+  NovoLancamento,
+  Ordenacao,
+  Pagina,
+} from './lancamento.modelos';
 
 @Injectable({ providedIn: 'root' })
 export class LancamentoService {
@@ -25,6 +32,14 @@ export class LancamentoService {
       }
     }
     return this.http.get<Pagina<Lancamento>>('/api/lancamentos', { params });
+  }
+
+  criar(dados: NovoLancamento): Observable<Lancamento> {
+    return this.http.post<Lancamento>('/api/lancamentos', dados);
+  }
+
+  atualizar(id: string, dados: DadosLancamento): Observable<Lancamento> {
+    return this.http.put<Lancamento>(`/api/lancamentos/${id}`, dados);
   }
 
   marcarComoPaga(id: string, dataPagamento?: string): Observable<Lancamento> {

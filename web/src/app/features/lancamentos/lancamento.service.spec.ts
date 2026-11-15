@@ -15,6 +15,15 @@ function iniciar() {
   };
 }
 
+const DADOS = {
+  descricao: 'Mercado',
+  valor: 240.9,
+  categoriaId: 'k-1',
+  dataLancamento: '2026-11-10',
+  dataVencimento: null,
+  natureza: 'VARIAVEL' as const,
+};
+
 describe('LancamentoService', () => {
   it('deve listar com filtros, paginação e ordenação', () => {
     const { servico, controle } = iniciar();
@@ -47,6 +56,28 @@ describe('LancamentoService', () => {
     expect(params.get('inicio')).toBe('2026-11-01');
     expect(params.get('fim')).toBe('2026-11-30');
     expect(params.has('categoriaId')).toBe(false);
+    controle.verify();
+  });
+
+  it('deve criar um lançamento', () => {
+    const { servico, controle } = iniciar();
+
+    servico.criar({ ...DADOS, dataPagamento: null }).subscribe();
+
+    const requisicao = controle.expectOne('/api/lancamentos');
+    expect(requisicao.request.method).toBe('POST');
+    expect(requisicao.request.body).toEqual({ ...DADOS, dataPagamento: null });
+    controle.verify();
+  });
+
+  it('deve atualizar um lançamento', () => {
+    const { servico, controle } = iniciar();
+
+    servico.atualizar('abc', DADOS).subscribe();
+
+    const requisicao = controle.expectOne('/api/lancamentos/abc');
+    expect(requisicao.request.method).toBe('PUT');
+    expect(requisicao.request.body).toEqual(DADOS);
     controle.verify();
   });
 

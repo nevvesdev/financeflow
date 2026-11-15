@@ -42,3 +42,16 @@ export interface Ordenacao {
   campo: CampoOrdenacao;
   direcao: 'asc' | 'desc';
 }
+
+export interface DadosLancamento {
+  descricao: string;
+  valor: number;
+  categoriaId: string;
+  dataLancamento: string;
+  dataVencimento: string | null;
+  natureza: NaturezaLancamento;
+}
+
+export interface NovoLancamento extends DadosLancamento {
+  dataPagamento: string | null;
+}
