@@ -32,6 +32,7 @@ import {
   Pagina,
 } from './lancamento.modelos';
 import { LancamentoService } from './lancamento.service';
+import { FormularioLancamento } from './formulario-lancamento';
 
 type AbaTipo = 'TODOS' | TipoLancamento;
 type Situacao = '' | 'ABERTOS' | 'PAGOS' | 'VENCIDOS';
@@ -41,7 +42,15 @@ const ESPERA_BUSCA_MS = 300;
 
 @Component({
   selector: 'app-pagina-lancamentos',
-  imports: [Abas, SeletorPeriodo, Paginacao, DialogoConfirmacao, MoedaPipe, DataCurtaPipe],
+  imports: [
+    Abas,
+    SeletorPeriodo,
+    Paginacao,
+    DialogoConfirmacao,
+    FormularioLancamento,
+    MoedaPipe,
+    DataCurtaPipe,
+  ],
   templateUrl: './pagina-lancamentos.html',
   styleUrl: './pagina-lancamentos.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,6 +62,7 @@ export class PaginaLancamentos {
   private readonly destruicao = inject(DestroyRef);
   private readonly busca$ = new Subject<string>();
   private readonly dialogoExclusao = viewChild(DialogoConfirmacao);
+  private readonly formularioLancamento = viewChild(FormularioLancamento);
 
   private requisicao: Subscription | null = null;
 
@@ -204,6 +214,18 @@ export class PaginaLancamentos {
 
   recarregar(): void {
     this.carregar(false);
+  }
+
+  abrirNovo(): void {
+    this.formularioLancamento()?.abrirParaCriar();
+  }
+
+  editar(lancamento: Lancamento): void {
+    this.formularioLancamento()?.abrirParaEditar(lancamento);
+  }
+
+  aoSalvar(): void {
+    this.carregar(true);
   }
 
   alternarPagamento(lancamento: Lancamento): void {
