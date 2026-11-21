@@ -1,0 +1,167 @@
+<dialog
+  #gaveta
+  class="gaveta"
+  [attr.aria-labelledby]="idTitulo"
+  (click)="aoClicarNoFundo($event)"
+>
+  <form
+    class="gaveta__formulario"
+    [formGroup]="formulario"
+    [attr.data-versao]="versao()"
+    (ngSubmit)="salvar()"
+    novalidate
+  >
+    <header class="gaveta__cabecalho">
+      <h2 class="gaveta__titulo" [id]="idTitulo">{{ titulo() }}</h2>
+      <button
+        class="botao botao--fantasma botao--icone"
+        type="button"
+        (click)="fechar()"
+        aria-label="Fechar"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="gaveta__corpo">
+      <div class="campo">
+        <label for="lancamento-descricao">Descrição</label>
+        <input
+          id="lancamento-descricao"
+          type="text"
+          formControlName="descricao"
+          autocomplete="off"
+          autofocus
+          [attr.aria-invalid]="mensagemDoCampo('descricao') ? 'true' : null"
+        />
+        @if (mensagemDoCampo('descricao'); as mensagem) {
+        <p class="campo__erro" role="alert">{{ mensagem }}</p>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="lancamento-valor">Valor</label>
+        <input
+          id="lancamento-valor"
+          type="text"
+          inputmode="decimal"
+          formControlName="valor"
+          placeholder="0,00"
+          autocomplete="off"
+          [attr.aria-invalid]="mensagemDoCampo('valor') ? 'true' : null"
+        />
+        @if (mensagemDoCampo('valor'); as mensagem) {
+        <p class="campo__erro" role="alert">{{ mensagem }}</p>
+        } @else {
+        <p class="campo__dica">Ex.: 25, 25,50 ou 1.234,56</p>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="lancamento-categoria">Categoria</label>
+        <select
+          id="lancamento-categoria"
+          formControlName="categoriaId"
+          [attr.aria-invalid]="mensagemDoCampo('categoriaId') ? 'true' : null"
+        >
+          <option value="" disabled>Selecione…</option>
+          @if (despesas().length > 0) {
+          <optgroup label="Despesas">
+            @for (categoria of despesas(); track categoria.id) {
+            <option [value]="categoria.id">{{ categoria.nome }}</option>
+            }
+          </optgroup>
+          }
+          @if (receitas().length > 0) {
+          <optgroup label="Receitas">
+            @for (categoria of receitas(); track categoria.id) {
+            <option [value]="categoria.id">{{ categoria.nome }}</option>
+            }
+          </optgroup>
+          }
+        </select>
+        @if (mensagemDoCampo('categoriaId'); as mensagem) {
+        <p class="campo__erro" role="alert">{{ mensagem }}</p>
+        } @else if (tipoSelecionado(); as tipo) {
+        <p class="campo__dica">
+          {{ tipo === 'RECEITA' ? 'Entra no saldo como receita.' : 'Sai do saldo como despesa.' }}
+        </p>
+        }
+      </div>
+
+      <fieldset class="grupo">
+        <legend class="grupo__legenda">Natureza</legend>
+        <div class="segmentado">
+          <label class="segmentado__opcao">
+            <input type="radio" formControlName="natureza" value="VARIAVEL" />
+            <span>Variável</span>
+          </label>
+          <label class="segmentado__opcao">
+            <input type="radio" formControlName="natureza" value="FIXA" />
+            <span>Fixa</span>
+          </label>
+        </div>
+        <p class="campo__dica">Fixa: se repete todo mês, como aluguel e internet. Variável: gasto avulso.</p>
+      </fieldset>
+
+      <div class="gaveta__datas">
+        <div class="campo">
+          <label for="lancamento-data">Data</label>
+          <input
+            id="lancamento-data"
+            type="date"
+            formControlName="dataLancamento"
+            [attr.aria-invalid]="mensagemDoCampo('dataLancamento') ? 'true' : null"
+          />
+          @if (mensagemDoCampo('dataLancamento'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="lancamento-vencimento">Vencimento</label>
+          <input
+            id="lancamento-vencimento"
+            type="date"
+            formControlName="dataVencimento"
+            [attr.aria-invalid]="mensagemDoCampo('dataVencimento') ? 'true' : null"
+          />
+          @if (mensagemDoCampo('dataVencimento'); as mensagem) {
+          <p class="campo__erro" role="alert">{{ mensagem }}</p>
+          } @else {
+          <p class="campo__dica">Opcional</p>
+          }
+        </div>
+      </div>
+
+      @if (!editando()) {
+      <div class="grupo">
+        <label class="caixa">
+          <input type="checkbox" formControlName="pago" />
+          <span>{{ rotuloPago() }}</span>
+        </label>
+        @if (formulario.controls.pago.value) {
+        <div class="campo">
+          <label for="lancamento-pagamento">Data do pagamento</label>
+          <input id="lancamento-pagamento" type="date" formControlName="dataPagamento" />
+          <p class="campo__dica">Deixe em branco para usar hoje.</p>
+        </div>
+        }
+      </div>
+      }
+
+      @if (erroGeral(); as mensagem) {
+      <p class="alerta alerta--erro" role="alert">{{ mensagem }}</p>
+      }
+    </div>
+
+    <footer class="gaveta__rodape">
+      <button class="botao botao--secundario" type="button" (click)="fechar()">Cancelar</button>
+      <button class="botao botao--primario" type="submit" [disabled]="enviando()">
+        {{ enviando() ? 'Salvando…' : 'Salvar' }}
+      </button>
+    </footer>
+  </form>
+</dialog>
